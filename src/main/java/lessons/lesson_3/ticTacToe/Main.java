@@ -1,16 +1,19 @@
-package lessons.lesson_2.ticTacToe;
+package lessons.lesson_3.ticTacToe;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import lessons.lesson_3.ticTacToe.models.Person;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
+/**
+ * Главный класс если хотите поиграть
+ */
 
 public class Main {
 
     //Адрес файла где хранится рейтинг игроков,
     // изначально в нем не пустое значение что бы не было ошибки класса ObjectInputStream
-    private final static String PATH = "src/main/java/lessons/lesson_2/ticTacToe/save.bin";
+    private final static String PATH = "src/main/java/lessons/lesson_3/ticTacToe/savedFiles/generalStatistics.bin";
 
     //Сканнер
     static final Scanner SCANNER = new Scanner(System.in);
@@ -23,6 +26,7 @@ public class Main {
         System.out.println("Игрок 2 введите свое имя");
         Person gamer2 = new Person(SCANNER.nextLine());
 
+
         // десериализуем список игроков с их рейтингами из файла
         List<Person> persons = Serialize.readPersons(PATH);
 
@@ -32,7 +36,7 @@ public class Main {
 
         while (true) {
             // Игровой процесс
-            GameProcess.game(index1, index2, persons);
+            GameWithHuman.game(index1, index2, persons);
 
             // Вызываем метод печатающий рейтинг игроков и их место в нем
             printRating(gamer1, gamer2, persons);
