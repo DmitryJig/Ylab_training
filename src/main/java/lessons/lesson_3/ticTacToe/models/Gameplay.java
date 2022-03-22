@@ -1,71 +1,62 @@
 package lessons.lesson_3.ticTacToe.models;
 
-import java.util.*;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Gameplay {
 
-    // Список для преобразования координат из формата с одной цифрой
-    private static List<String> STEP_VALUES = Arrays.asList("11", "21", "31", "12", "22", "32", "13", "23", "33");
 
-    // карта с игроками содержит имена игроков и символы которыми они будут ходить
-    private Map<String, Character> gamers = new LinkedHashMap<>();
+
+    // коллекция с игроками
+    @SerializedName("Player")
+    private List<Player> players = new ArrayList<>();
 
     // Список шагов, выполненных игроками
-    private List<String> steps = new ArrayList<>();
+    @SerializedName("Game")
+    private Game game = new Game();
 
-    // результат игры
-    private List<String> result = new ArrayList<>();
+    // результат игры (объект игорка победителя), если он null то будет обработано как ничья
+    @SerializedName("GameResult")
+    private GameResult gameResult = null;
 
     //Геттеры
-    public Map<String, Character> getGamers() {
-        return gamers;
+    public List<Player> getGamers() {
+        return players;
     }
 
-    public List<String> getSteps() {
-        return steps;
+    public Game getGame() {
+        return game;
     }
 
-    public List<String> getResult() {
-        return result;
-    }
-
-    /**
-     * В этом методе загоняем все данные о результате игры в коллекцию строк
-     * @param attribute строковое значение атрибута результата игры
-     */
-    public void addResult(String attribute){
-        this.result.add(attribute);
+    public GameResult getGameResult() {
+        return gameResult;
     }
 
     /**
-     * метод добавления игрока в мапу gamers
-     *
-     * @param name   имя игрока - строка
-     * @param symbol символ которым ходит игрок
+     * метод добавления игрока в коллекцию gamers
      */
-    public void addGamer(String name, Character symbol) {
-        gamers.put(name, symbol);
+    public void addGamer(Player player) {
+        players.add(player);
     }
 
     /**
-     * Метод для добавления шага игры (прогоняем через валидатор чтобы работал с любыми форматами)
+     * Простой сеттер результата игры
+     * @param gameResult
      */
-    public void addStep(String step) {
-        steps.add(validationStep(step));
+    public void setGameResult(GameResult gameResult) {
+        this.gameResult = gameResult;
     }
-
     /**
-     * метод преобразует любой допускаемый формат шагов к формату "22"
-     * @param step входящее значение хода в любом допустимом формате
-     * @return строка шага в формате "22"
+     * Сеттер результата игры с входящим объектом игрока
+     * @param player объект игрока победителя
      */
-    public String validationStep(String step) {
-        if (step.length() == 1) {
-            return STEP_VALUES.get(Integer.parseInt(step) - 1);
+    public void setGameResult(Player player) {
 
-        } else if (step.length() > 2) {
-            return step.replaceAll("[^0-9]", "");
-        }
-        return step;
+        GameResult gameResult = new GameResult(player);
+        this.gameResult = gameResult;
     }
+
+
 }

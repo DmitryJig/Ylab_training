@@ -1,24 +1,28 @@
 package lessons.lesson_3.ticTacToe;
 
 import lessons.lesson_3.ticTacToe.models.Gameplay;
+import lessons.lesson_3.ticTacToe.models.Player;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Класс воспроизводит ход игры из объекта gameplay
  */
-public class GameFromXml extends GameMethods {
+public class GameFromGameplay extends GameMethods {
 
     public static void game(Gameplay gameplay) {
 
-        Map<String, Character> gamers = gameplay.getGamers();
-        String name1 = (String) gamers.keySet().toArray()[0];
-        String name2 = (String) gamers.keySet().toArray()[1];
-        char symbolX = gamers.get(name1);
-        char symbol0 = gamers.get(name2);
+        List<Player> gamers = gameplay.getGamers();
+        String name1 = gamers.get(0).getName();
+        String name2 = gamers.get(1).getName();
+        char symbolX = gamers.get(0).getSymbol();
+        char symbol0 = gamers.get(1).getSymbol();
+
         char symbol;
-        List<String> steps = gameplay.getSteps();
+
+        List<String> steps = gameplay.getGame().getSteps().stream().map(x -> x.getText()).collect(Collectors.toList());
+
         initMap();
 
         int stepNumber = 0;
@@ -35,11 +39,12 @@ public class GameFromXml extends GameMethods {
             gameplayTurn(symbol, x, y);
             printMap();
         }
-        if (gameplay.getResult().isEmpty()){
+        if (gameplay.getGameResult() == null){
             System.out.println("Draw!");
         } else {
-            List<String> results = gameplay.getResult();
-            System.out.println("Player " + results.get(0) + " -> " + results.get(1) + " is winner as '" + results.get(2) +"'!");
+            Player result = gameplay.getGameResult().getPlayer();
+
+            System.out.println("Player " + result.getId() + " -> " + result.getName() + " is winner as '" + result.getSymbol() +"'!");
         }
     }
 }

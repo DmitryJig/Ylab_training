@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Класс игрока
+ * Класс игрока для ведения статистики игр
  */
 
 public class Person implements Serializable {

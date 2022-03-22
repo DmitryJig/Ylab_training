@@ -1,5 +1,6 @@
 package lessons.lesson_3.ticTacToe;
 
+import lessons.lesson_3.ticTacToe.models.Gameplay;
 import lessons.lesson_3.ticTacToe.models.Person;
 import java.util.List;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class Main {
         Person gamer2 = new Person(SCANNER.nextLine());
 
 
-        // десериализуем список игроков с их рейтингами из файла
+        // десериализуем список игроков с их рейтингами из файла общей статистики(рейтинга всех игроков)
         List<Person> persons = Serialize.readPersons(PATH);
 
         // ищем индексы игроков в полученной из десериализации коллекции, сли их нет добавляем их в конец коллекции
@@ -35,10 +36,18 @@ public class Main {
         int index2 = getIndex(gamer2, persons);
 
         while (true) {
-            // Игровой процесс
-            GameWithHuman.game(index1, index2, persons);
+            // Игровой процесс  c возвратом записанного геймплея
+            Gameplay gameplay = GameWithHuman.game(index1, index2, persons);
 
-            // Вызываем метод печатающий рейтинг игроков и их место в нем
+            //Создаем объекты писателя (XmlWriter для записи в формат xml и json)
+            GameWriter xmlWtiter = new XmlWriter();
+            GameWriter jsonWriter = new JsonWriter();
+
+            // Передаем созданный после игры геймплей на запись
+            xmlWtiter.write(gameplay);
+            jsonWriter.write(gameplay);
+
+            // После игры вызываем метод печатающий рейтинг игроков и их место в нем
             printRating(gamer1, gamer2, persons);
 
             System.out.println("Хотите сыграть еще? да/нет");
@@ -57,7 +66,6 @@ public class Main {
     /**
      * Метод ищет во входящей коллекции индекс нахождения игрока,
      * если его нет то добавляет игрока в коллекцию и возвращает индекс его нахождения
-     * это нужно для
      *
      * @param gamer   объект игрока
      * @param persons коллекция объектов игроков

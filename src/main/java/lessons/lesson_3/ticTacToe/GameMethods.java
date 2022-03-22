@@ -1,10 +1,9 @@
 package lessons.lesson_3.ticTacToe;
 
 
+import lessons.lesson_3.ticTacToe.models.Gameplay;
 import lessons.lesson_3.ticTacToe.models.Person;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -55,7 +54,7 @@ public class GameMethods {
     /**
      * ход игрока (человека)
      */
-    public static void humanTurn(char symbol, XMLStreamWriter writer) {
+    public static void humanTurn(char symbol, Gameplay gameplay) {
         Scanner scanner = new Scanner(System.in);
         int x, y;
         do {
@@ -64,11 +63,9 @@ public class GameMethods {
             y = scanner.nextInt() - 1;
         } while (!isCellValid(x, y));
         map[y][x] = symbol;
-        try {
-            writer.writeCharacters((x + 1) + "" + (y + 1));
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        }
+
+            gameplay.getGame().addStep((x + 1) + "" + (y + 1));
+
         System.out.println("Вы сходили в точку " + (x + 1) + " " + (y + 1));
     }
 
@@ -164,8 +161,5 @@ public class GameMethods {
             }
         }
         return true;
-    }
-
-    static void game(int index1, int index2, List<Person> persons) {
     }
 }
